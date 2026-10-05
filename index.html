@@ -117,7 +117,7 @@ h1{font-size:30px;line-height:1.15;margin-bottom:8px}
       <div class="kact">
         <button class="btn" id="copy" data-t="copy"></button>
       </div>
-      <div class="exp" data-t="exp"></div>
+      <div class="exp" data-t="exp"></div><div class="exp" id="left"></div>
       <div class="note" data-t="note"></div>
     </div>
     <div class="err" id="err"></div>
@@ -133,39 +133,35 @@ h1{font-size:30px;line-height:1.15;margin-bottom:8px}
 <script>
 (function(){
 "use strict";
+var LINKS={1:"https://discord.gg/projectreal",2:"https://discord.gg/tcdZaHdP",3:"https://discord.gg/U26tQfnPE"};
 var SPONSOR="https://t.me/+6Kr7OQS1Ptg2NGZi";
-var DISCORD="https://discord.gg/tcdZaHdP";
-var BECON="https://t.me/beconscript";
-var WAIT=20;
-var DAYS=15;
-var SALT="sg-gays-4";
-var ENC=["FRNMF0weFAAAARdZSlMaHQBRQ19fSgQcGkYFRUodCRJNAwBzNEoUCBk=", "FRNMF0weFAACCl5FShQdQAAEAQVaShAAQFdNEEpAV1ccAgBzNEpEBlg=", "FRNMF0weFAANQ19HShMMGwACFFdYSlQPFV1HCUpcHxlIRABzNEpGFVY=", "FRNMF0weFABBRh5CShlBFgAGSgZMSlEdGkEEQEpIDhBOBABzNEpMEVE=", "FRNMF0weFAAHCxNeShJJFwAMAxVdSgUKBx1ZRkpUFANPSwBzNEoZVBI=", "FRNMF0weFAANHgZPSg9NAwBOBw4fSggVEVRZEUpHHQ8dQwBzNEpVVwY=", "FRNMF0weFABGQR5fSgUcSgBGQlNXShEbEUlGC0pUBBEeHgBzNEoZHhE=", "FRNMF0weFAABRhdfShcJHABGRxJBSggOAEtfG0pPHRJKBwBzNEpJVFE=", "FRNMF0weFAACQVVdSgQaEgBNAQlHSlMNARhQBEpMAREJHgBzNEoVBVI=", "FRNMF0weFABbBQ5OSg5AAgBFChFDShgeRlUGEUpYBgJMFQBzNEodHlE=", "FRNMF0weFABEC1JCShYfHQBNHB8bSgoNG0xAHkpYFFUTHABzNEpBFVc=", "FRNMF0weFABMEQtcShIfRgBHAg9dSggMHFhBGUpAUhITAQBzNEpJEFg=", "FRNMF0weFABZRlVLSllOHwBeGQhcSlZKFV5WQ0pPHhQeCgBzNEpBFwQ=", "FRNMF0weFABEBBMaSg0RAQAFBB8cShVKBENdR0pcAglNBQBzNEpVA1I=", "FRNMF0weFABaHxRPShlKBQBQHRcbSlFKAlcGGkoUVBMYQgBzNEpAFlI=", "FRNMF0weFAADSwpPSgpIQABAEBFXSgcORxlOEUpBUhYDRgBzNEpJVQU=", "FRNMF0weFAABFwxPSlRLQwBXHglaSlMcAxRbBEpCDQgWHgBzNEpEVA0=", "FRNMF0weFABZHRIYShARHQBcRABJSlgWERpVQUpVDxEBHABzNEpPAgY=", "FRNMF0weFABbEQNEShRIHwAAAgFDSlcAFklSAEpUBFMSGwBzNEpYXhA=", "FRNMF0weFABCEF5JSgoOGgAEBAIZSg0OH1lVRkpEDxFOSwBzNEpFVRk=", "FRNMF0weFABYEARAShUPQwBYARVZShNOQUxWBkpdHg1KFgBzNEpIBRc=", "FRNMF0weFABOCx9dSldOSgAEQwNfShYMRE5NHkpXUBhIQQBzNEpVVww=", "FRNMF0weFAABBw0YSgYTQgBCQFZJSlQYHR8CRkpbVVcMRQBzNEpdE1U=", "FRNMF0weFAAERBBJSlgOGABOGwVYShQBRkxRGEpJDAtOFgBzNEpdBAM=", "FRNMF0weFABMRAZeSgQKGgBRFRBKSgAJA0lDB0oVFBYJGABzNEpeUFI=", "FRNMF0weFABZQwBXSgsXFgBRQhBaSgwfBEdAGEofCQ1BRABzNEpLURA=", "FRNMF0weFABOHQheSgpJEQBRQlVbShcPAUtfH0pFCRIDGwBzNEpEVVg=", "FRNMF0weFABfQAxUSgAWQgBRBQhcShJMGhRZFUpcVA1MSgBzNEpZEQw=", "FRNMF0weFAADRQhLShhMQQBHAg4dSgcKBkQNEEpdExgbQwBzNEpFFlg=", "FRNMF0weFABNBh0UShkXSgBTHwhVSlAVShkNGEpKDxAeGwBzNEpPVAk=", "FRNMF0weFABcCgkZSlcfFAABCwVfSgUMChgDBkpPFhEQFgBzNEpFA1Q=", "FRNMF0weFABVBAtfShhMEgBCHQ1USggSRkpVSkoVC1cQHwBzNEpcXxY=", "FRNMF0weFABaFQJPSgQWCQAEGFRfShcdBENaFEoYARMXEABzNEpcFw4=", "FRNMF0weFABFQ15HSgtIGgBWFRMVSgJOFR1fEkoUCgpMCgBzNEpYAVM=", "FRNMF0weFABMAgBaSgNKAgAAAxVMSlQdQF9DH0pFFBVPBQBzNEpEDhs=", "FRNMF0weFABQHVdPSgsVBAANHwNMSgVPHFQNGUpCCFJICwBzNEodCw8=", "FRNMF0weFABaSwJYSghOFABERwAZShdAEUVeQEoaXxAMSgBzNEpfXwY=", "FRNMF0weFAAEGlRfSlYNQgAFBlZbSlIbCxhMFkoVUVIVHwBzNEpBElA=", "FRNMF0weFAANH1BOSlEQAAAFEhUcSgIIEkYAF0pLUgBBQwBzNEocERI=", "FRNMF0weFABcHARBSlQeQQAARAtZShgOCkBNQUpFEgYcEQBzNEpPU1E=", "FRNMF0weFABFAlZEShVIHQBMAgUbShQfSl0GFEpFAlgDRgBzNEpaU1Q=", "FRNMF0weFAAFEl5eShQaBgANBwAbShNKA0heBkpbUxMbGABzNEpFVxU=", "FRNMF0weFABfBwpcSg1NAABaFxdGSlAAQUACBUpJU1QNAwBzNEpXUgA=", "FRNMF0weFABQAB1BSlgSAgAGAR9aSg4dBUYAAUpKEA1ICwBzNEpEARQ=", "FRNMF0weFAAFEFQeSgdIQwBMCw4VSlBMEhoMBkpHBlceHQBzNEpXVg0=", "FRNMF0weFABNRANCShQaAQBeSlcfSlUTHV8EFEpPBA1AGgBzNEpBFgI=", "FRNMF0weFABbHgFMShtNQQAHSlVPSgcMBV9aEEpGVgYQAABzNEoaFBQ=", "FRNMF0weFABMSggZSglMAQBaRg0bSgJAHx8ARUoZFVANGABzNEpcXgM=", "FRNMF0weFABTGBFUShgfGwBZHg5bSgoNSkpbREpXFQoKAwBzNEoYV1Y=", "FRNMF0weFABMRR0aSgQUEQBBH1FDSlJAEBpaAEpZBgwfQwBzNEpAVlc=", "FRNMF0weFAAHHV5GShZOBABfAwlGSlIJAkVBAkocEQkQCQBzNEpXEQU=", "FRNMF0weFAAMRQMfShsBSgBTQwIaSg8AHENDEUpXFghNFQBzNEocUA8=", "FRNMF0weFAACHB1IShJMRgBCHw0bSggKHlVHSkpJAAcOQgBzNEpIAQ0=", "FRNMF0weFABbQA5DSlRMBgBSSlFbSlIWRE9TQUpDUwJMFgBzNEoeHRk=", "FRNMF0weFABTARJLSg5OEgBMShdUSgQRG0QEAEoeEgcJGABzNEpYUwA=", "FRNMF0weFABNHQ9VSlVMQgBdRx9bSgRIC05YFEobFwsNEgBzNEoYD1c=", "FRNMF0weFABMQhJCSgwdGQBCCVJJShkYRF5fHEpAFxsfFABzNEpaBAA=", "FRNMF0weFABAHgJPSlEdAAAGQVNHSlkdEUlZHEpAXwwUQABzNEpIAhs=", "FRNMF0weFABTC19ISlcNGQBRGARPSgkRFFxAQkpFCxVAHwBzNEoZCFM=", "FRNMF0weFABWBgRKSlkLHQAFQQhbSgkXFU5TQ0obFgcUEgBzNEpACFM=", "FRNMF0weFABZEBdaSlEfCgBNClBAShcMGhpBRUpBBFYQEgBzNEpJDgk=", "FRNMF0weFABWSwNUShFLGgBaRQQZShYTAEhBHUoVCVgMRgBzNEpGHgY=", "FRNMF0weFABFGgReSgURQwAEAwBGSg4cAUlABkoVFhVLQwBzNEpKXhc=", "FRNMF0weFABEFxRGShkOFQBMRw9OShJIRVVOG0oaFBIKRgBzNEodCQY=", "FRNMF0weFABOSlAbShMfCgBeAwlFSlFMHR4DBEpEUQMMAwBzNEpKUBQ=", "FRNMF0weFAANGQkYSgRLRgBCFRNYSlYVSltDA0pPXgkVCwBzNEoUEww=", "FRNMF0weFABTQwtdSgUAHgBcHFZFSgZOHkZaHEpCU1hPRgBzNEoYBgw=", "FRNMF0weFAAGGQVbShQDQwAAHxQeSlhOFlxYGEodHwsBQwBzNEpfFBk=", "FRNMF0weFABXAR1HShhPCQBBQQRbShkLS09eBEpHCxZIGwBzNEoUAlA=", "FRNMF0weFABeQFZEShQNSwBECh1ZSggUHlhcFEpeABVKQwBzNEobFgI=", "FRNMF0weFAAMQlFeSgQeHwAAAl9fSgcUHkgFR0pOAAIdRABzNEoaEBE=", "FRNMF0weFABDGVNfSgZMQABOFlccSgBLRV9OAEofBgMSQwBzNEpIAQ0=", "FRNMF0weFABERRJfSgoYGgBRCw9GShQYBl5ZSkofCVEKAwBzNEpMFA4=", "FRNMF0weFABVQVQaSgsaQgBNCR5ZShsIC09MBEpZBlIOHgBzNEpaFQs=", "FRNMF0weFABeGR9aSgMIFQBESg1KSgABRRkFSkpIFFAAEgBzNEpPVgQ=", "FRNMF0weFABDFxceSggAHQBFHFMeSg4KCkIFG0obDVEAQgBzNEpVHVY=", "FRNMF0weFAACS1dKSgIdCgBAFhIdSg0SREZNR0pbHRMRSwBzNEpJVwo=", "FRNMF0weFAACHx8YSlcQSgAHRVBJShcDFxtQQUpYAAQDAQBzNEpKCwI=", "FRNMF0weFABEBw9aSgcNHwBGQgNBSlMdQFxAREpAAwVMCgBzNEoYFhU=", "FRNMF0weFABSGghfSgQTFABZHlFfSgRNHEZFRUodEgwNAgBzNEpGDAA=", "FRNMF0weFABbAghbSg8RQQABBRIYSgwMSkVZFkoeARlJBgBzNEoZURM=", "FRNMF0weFABOFV4USlQaRwAGBRVPShNJGUoNEkocUgYeQwBzNEpIBQ4=", "FRNMF0weFAAMERRUSgMAHgBHFQxZSlEYHEEHF0pMX1YYAQBzNEpYBAU=", "FRNMF0weFABYFQNOSgAPRgBHRh5FSlkVQR1ZRkpBAlETBABzNEoVElc=", "FRNMF0weFAAEFA5fSgNMAQBTRgJPShsbB1REAEodAwAXRwBzNEofFQw=", "FRNMF0weFABCAQ5OSlYdAgBFHlRZSg8NREBcAEobBgIBAQBzNEpPXhY=", "FRNMF0weFABYCVNZSlRBAgBWAAFDSgwNEltHHEoYEAUNRgBzNEpAHQg=", "FRNMF0weFABCGBZKSgsDRwBQGFJESgxPG1cBGEpIF1gbRgBzNEoVEQY=", "FRNMF0weFABMGRJOSlIAAABXGABFSgULRl1GHUoUFBgIAwBzNEpCVlY=", "FRNMF0weFAANGgBCSlhPRAANHlRCSlQDBVUMAEpJEVJPGwBzNEpBFFI="];
-var NS="sakuragays-df4199ed97fd293d";
-var LS="sakura_gays_keysys_v1";
+var WMIN=20,WMAX=30;
+var DAYS=1;
+var SECRET="4bdeb08783c6c6728a6eeed7";
+var LS="sakura_gays_keysys_v2";
+var A36="abcdefghijklmnopqrstuvwxyz0123456789";
 
 var I18N={
-ru:{h1:"Получи ключ",sub:"Выполни три задания, подожди 20 секунд после каждого и забери бесплатный ключ. Ключ действует 15 дней. Каждый ключ выдаётся только один раз.",
-t1:"Подпишись на Telegram спонсора",d1:"Канал спонсора. Открой ссылку и подожди 20 секунд.",
-t2:"Вступи на Discord-сервер",d2:"Приглашение на сервер. Открой ссылку и подожди 20 секунд.",
-t3:"Получайте скрипты тут",d3:"Telegram-канал со скриптами. Открой ссылку и подожди 20 секунд.",
-go:"Перейти",done:"Выполнено ✓",get:"Получить ключ",hint:"Кнопка откроется, когда все три задания будут выполнены.",
+ru:{h1:"Получи ключ",sub:"Выполни три задания и подожди после каждого от 20 до 30 секунд (время случайное). Ключ генерируется сайтом и действует 1 день.",
+t1:"Скачай Real!",d1:"Открой ссылку, подожди проверку задания.",
+t2:"Вступи на Discord",d2:"Открой ссылку, подожди проверку задания.",
+t3:"Вступи на второй Discord",d3:"Открой ссылку, подожди проверку задания.",
+go:"Перейти",done:"Выполнено ✓",get:"Сгенерировать ключ",hint:"Кнопка откроется, когда все три задания будут выполнены.",
 wait:"Подожди, задание проверяется… осталось ",sec:" сек",copy:"Скопировать ключ",copied:"Скопировано ✓",
-exp:"Ключ действует 15 дней с момента первого ввода в скрипте.",
-note:"Вставь ключ в окно скрипта sakura.gays. Пятнадцать дней отсчитываются с первого ввода ключа. Сохрани ключ и не делись им: его получает только один человек.",
-loading:"Выдаём ключ…",errnet:"Не удалось связаться с сервером выдачи. Обнови страницу и попробуй ещё раз.",
-out:"Все 90 бесплатных ключей уже розданы. Следи за новой раздачей в Telegram.",
+exp:"Ключ действует 1 день с момента генерации.",
+note:"Вставь ключ в окно sakura.gays. Через 24 часа ключ перестанет работать, и нужно будет пройти задания заново. Не делись ключом.",
+gen:"Генерирую ключ…",left:"Осталось до конца ключа: ",
 pt:"Premium-ключ (навсегда)",pd:"Premium-ключи на сайте не выдаются и здесь не показываются. Они не заканчиваются. Жди раздачу в Telegram спонсора.",pb:"Telegram спонсора",
 foot:"sakura.gays · key system"},
-en:{h1:"Get your key",sub:"Complete three tasks, wait 20 seconds after each one and grab a free key. The key lasts 15 days. Every key is given out only once.",
-t1:"Join the sponsor's Telegram",d1:"Sponsor channel. Open the link and wait 20 seconds.",
-t2:"Join the Discord server",d2:"Server invite. Open the link and wait 20 seconds.",
-t3:"Get scripts here",d3:"Telegram channel with scripts. Open the link and wait 20 seconds.",
-go:"Open",done:"Completed ✓",get:"Get key",hint:"The button unlocks when all three tasks are completed.",
+en:{h1:"Get your key",sub:"Complete three tasks and wait 20 to 30 seconds after each one (random time). The key is generated by the site and lasts 1 day.",
+t1:"Download Real!",d1:"Open the link and wait for the task check.",
+t2:"Join the Discord",d2:"Open the link and wait for the task check.",
+t3:"Join the second Discord",d3:"Open the link and wait for the task check.",
+go:"Open",done:"Completed ✓",get:"Generate key",hint:"The button unlocks when all three tasks are completed.",
 wait:"Hold on, verifying the task… left: ",sec:" s",copy:"Copy key",copied:"Copied ✓",
-exp:"The key lasts 15 days from the first time you enter it in the script.",
-note:"Paste the key into the sakura.gays window. The fifteen days start counting from the first time you enter the key. Save it and do not share it: only one person receives each key.",
-loading:"Issuing your key…",errnet:"Could not reach the key server. Refresh the page and try again.",
-out:"All 90 free keys have been given out. Watch for the next giveaway on Telegram.",
+exp:"The key lasts 1 day from the moment it is generated.",
+note:"Paste the key into the sakura.gays window. After 24 hours it stops working and you will have to complete the tasks again. Do not share it.",
+gen:"Generating key…",left:"Key time left: ",
 pt:"Premium key (lifetime)",pd:"Premium keys are not issued on this site and are never shown here. They do not expire. Wait for the giveaway in the sponsor's Telegram.",pb:"Sponsor's Telegram",
 foot:"sakura.gays · key system"}
 };
@@ -175,6 +171,26 @@ try{var sl=localStorage.getItem("sakura_lang");if(sl)lang=sl}catch(e){}
 function $(id){return document.getElementById(id)}
 function load(){try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return {}}}
 function save(s){try{localStorage.setItem(LS,JSON.stringify(s))}catch(e){}}
+
+function rnd(n){
+  var o="",b=new Uint32Array(n);
+  (window.crypto||window.msCrypto).getRandomValues(b);
+  for(var i=0;i<n;i++)o+=A36.charAt(b[i]%36);
+  return o;
+}
+function b36(n,len){var s=Math.floor(n).toString(36);while(s.length<len)s="0"+s;return s}
+function mac(body){
+  var h1=5381,h2=52711,t="ezk1|"+SECRET+"|"+body;
+  for(var i=0;i<t.length;i++){var b=t.charCodeAt(i);h1=(h1*131+b)%4294967291;h2=(h2*137+b*7+1)%4294967279}
+  return b36(h1%2176782336,6)+b36(h2%1296,2);
+}
+function genKey(){
+  var ts=Math.floor(Date.now()/1000);
+  var body=["ez",rnd(1)+b36(ts,6),rnd(8),rnd(4),rnd(5),rnd(8),rnd(6),rnd(4),rnd(5)].join("-");
+  var m=mac(body);
+  return body+"-"+m.slice(0,6)+"-"+m.slice(6);
+}
+window.__genKey=genKey;
 
 var st=load();
 if(st.issued&&Date.now()-st.issued>DAYS*86400000){st={};save(st)}
@@ -192,77 +208,77 @@ function applyLang(){
 $("lru").onclick=function(){lang="ru";applyLang()};
 $("len").onclick=function(){lang="en";applyLang()};
 
-var tasks=[{id:1,url:SPONSOR},{id:2,url:DISCORD},{id:3,url:BECON}];
-function isDone(n){var t=st["s"+n];return !!t&&Date.now()-t>=WAIT*1000}
-function running(n){var t=st["s"+n];return !!t&&Date.now()-t<WAIT*1000}
+var ids=[1,2,3];
+function dur(n){return (st["w"+n]||WMAX)*1000}
+function isDone(n){var t=st["s"+n];return !!t&&Date.now()-t>=dur(n)}
+function running(n){var t=st["s"+n];return !!t&&Date.now()-t<dur(n)}
+var busy=false;
 
 function render(){
   var d=I18N[lang],doneCount=0;
-  for(var i=0;i<tasks.length;i++){
-    var n=tasks[i].id,el=$("t"+n);
+  for(var i=0;i<ids.length;i++){
+    var n=ids[i],el=$("t"+n);
     var done=isDone(n),run=running(n);
     if(done)doneCount++;
     el.className="task"+(done?" done":"")+(run?" run":"");
     $("b"+n).disabled=run;
     if(run){
-      var left=Math.max(0,WAIT*1000-(Date.now()-st["s"+n]));
-      $("p"+n).style.width=(100-left/(WAIT*10))+"%";
+      var total=dur(n),left=Math.max(0,total-(Date.now()-st["s"+n]));
+      $("p"+n).style.width=(100-left/total*100)+"%";
       $("x"+n).textContent=d.wait+Math.ceil(left/1000)+d.sec;
     }
   }
-  $("gbar").style.width=(doneCount/tasks.length*100)+"%";
-  if(!busy)$("getkey").disabled=doneCount<tasks.length;
-  $("hint").style.display=doneCount<tasks.length?"block":"none";
-  if(st.key&&doneCount===tasks.length){showKey()}
+  $("gbar").style.width=(doneCount/ids.length*100)+"%";
+  if(!busy)$("getkey").disabled=doneCount<ids.length;
+  $("hint").style.display=(doneCount<ids.length&&!st.key)?"block":"none";
+  if(st.key)showKey();
 }
 
-function decode(s){
-  var raw=atob(s),out="";
-  for(var i=0;i<raw.length;i++)out+=String.fromCharCode(raw.charCodeAt(i)^SALT.charCodeAt(i%SALT.length));
-  return out;
-}
 function showKey(){
   $("key").textContent=st.key;
   $("kb").className="keybox show";
   $("getkey").style.display="none";
   $("hint").style.display="none";
+  var left=Math.max(0,DAYS*86400000-(Date.now()-st.issued));
+  var h=Math.floor(left/3600000),m=Math.floor(left%3600000/60000);
+  $("left").textContent=I18N[lang].left+h+":"+(m<10?"0":"")+m;
 }
-function claim(){
-  return fetch("https://abacus.jasoncameron.dev/hit/"+NS+"/claims",{cache:"no-store"}).then(function(r){
-    if(!r.ok)throw new Error("http");
-    return r.json();
-  }).then(function(j){
-    if(!j||typeof j.value!=="number")throw new Error("bad");
-    return j.value;
-  });
-}
-var busy=false;
-function setErr(msg){var e=$("err");e.textContent=msg||"";e.className=msg?"err show":"err"}
 
-function start(n,url){
+function start(n){
   if(isDone(n)||running(n))return;
   st["s"+n]=Date.now();
+  st["w"+n]=WMIN+Math.floor(Math.random()*(WMAX-WMIN+1));
   save(st);
-  window.open(url,"_blank","noopener");
+  window.open(LINKS[n],"_blank","noopener");
   render();
 }
-$("b1").onclick=function(){start(1,SPONSOR)};
-$("b2").onclick=function(){start(2,DISCORD)};
-$("b3").onclick=function(){start(3,BECON)};
+$("b1").onclick=function(){start(1)};
+$("b2").onclick=function(){start(2)};
+$("b3").onclick=function(){start(3)};
 $("bp").onclick=function(){window.open(SPONSOR,"_blank","noopener")};
 
 $("getkey").onclick=function(){
   if(!(isDone(1)&&isDone(2)&&isDone(3)))return;
   if(st.key){showKey();return}
   if(busy)return;
-  busy=true;setErr("");
-  var gk=$("getkey");gk.disabled=true;gk.textContent=I18N[lang].loading;
-  claim().then(function(n){
-    if(n>ENC.length){setErr(I18N[lang].out);return}
-    st.key=decode(ENC[n-1]);st.issued=Date.now();save(st);showKey();
-  }).catch(function(){setErr(I18N[lang].errnet)}).then(function(){
-    busy=false;gk.textContent=I18N[lang].get;gk.disabled=!(isDone(1)&&isDone(2)&&isDone(3));
-  });
+  busy=true;
+  var gk=$("getkey");gk.disabled=true;gk.textContent=I18N[lang].gen;
+  var final=genKey(),kb=$("kb"),ke=$("key"),t0=Date.now(),total=1800;
+  kb.className="keybox show";
+  var iv=setInterval(function(){
+    var p=Math.min(1,(Date.now()-t0)/total),out="";
+    for(var i=0;i<final.length;i++){
+      var c=final.charAt(i);
+      if(c==="-"||i<p*final.length)out+=c;else out+=A36.charAt(Math.floor(Math.random()*36));
+    }
+    ke.textContent=out;
+    if(p>=1){
+      clearInterval(iv);
+      st.key=final;st.issued=Date.now();save(st);
+      busy=false;gk.textContent=I18N[lang].get;
+      showKey();
+    }
+  },45);
 };
 $("copy").onclick=function(){
   var k=st.key||"",b=$("copy"),d=I18N[lang];
@@ -277,9 +293,10 @@ $("copy").onclick=function(){
 
 applyLang();
 setInterval(function(){
+  if(busy)return;
   var any=false;
-  for(var i=0;i<tasks.length;i++){if(running(tasks[i].id))any=true}
-  if(any)render();else{var all=isDone(1)&&isDone(2)&&isDone(3);if(!busy)$("getkey").disabled=!all;if(all&&st.key)showKey()}
+  for(var i=0;i<ids.length;i++){if(running(ids[i]))any=true}
+  if(any||st.key)render();else{var all=isDone(1)&&isDone(2)&&isDone(3);$("getkey").disabled=!all}
 },250);
 document.addEventListener("visibilitychange",render);
 
@@ -302,5 +319,5 @@ if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
 }
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a43b0573992d5d7d',t:'MTc5MDg1MzAzMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
